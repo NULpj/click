@@ -1,22 +1,44 @@
-// Ambil elemen dari DOM
 const counterElement = document.getElementById("counter");
 const incrementButton = document.getElementById("incrementButton");
 const resetButton = document.getElementById("resetButton");
 
-// Ambil nilai counter dari localStorage atau atur ke 0 jika belum ada
+// Ambil nilai counter dari sessionStorage atau atur ke 0 jika belum ada
 let counter = parseInt(localStorage.getItem("counter")) || 0;
 counterElement.textContent = counter;
 
-// Tambahkan event listener untuk tombol increment
+// Polling untuk mengambil nilai terbaru dari file JSON setiap 5 detik
+setInterval(async () => {
+  try {
+    const response = await fetch('https://raw.githubusercontent.com/username/repository/main/counter.json');
+    const data = await response.json();
+    if (data.counter !== counter) {
+      counter = data.counter; // Update counter jika ada perubahan
+      counterElement.textContent = counter;
+    }
+  } catch (error) {
+    console.error('Error fetching counter data:', error);
+  }
+}, 5000);
+
+// Update counter di file JSON saat tombol diklik
 incrementButton.addEventListener("click", () => {
   counter++; // Tambah nilai counter
   counterElement.textContent = counter; // Perbarui tampilan
   localStorage.setItem("counter", counter); // Simpan ke localStorage
+
+  // Update file JSON (dalam hal ini kamu perlu update file JSON di GitHub secara manual atau via API)
+  fetch('https://raw.githubusercontent.com/username/repository/main/counter.json', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ counter }),
+  });
 });
 
-// Tambahkan event listener untuk tombol reset
+// Tombol reset
 resetButton.addEventListener("click", () => {
-  counter = 0; // Atur nilai counter ke 0
+  counter = 0; // Reset counter
   counterElement.textContent = counter; // Perbarui tampilan
   localStorage.setItem("counter", counter); // Simpan ke localStorage
 });
