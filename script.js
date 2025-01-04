@@ -9,7 +9,7 @@ counterElement.textContent = counter;
 // Polling untuk mengambil nilai terbaru dari file JSON setiap 5 detik
 setInterval(async () => {
   try {
-    const response = await fetch('https://raw.githubusercontent.com/username/repository/main/counter.json');
+    const response = await fetch('https://raw.githubusercontent.com/NULpj/click/main/counter.json');
     const data = await response.json();
     if (data.counter !== counter) {
       counter = data.counter; // Update counter jika ada perubahan
@@ -27,7 +27,7 @@ incrementButton.addEventListener("click", () => {
   localStorage.setItem("counter", counter); // Simpan ke localStorage
 
   // Update file JSON (dalam hal ini kamu perlu update file JSON di GitHub secara manual atau via API)
-  fetch('https://raw.githubusercontent.com/username/repository/main/counter.json', {
+  fetch('https://raw.githubusercontent.com/NULpj/click/main/counter.json', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
