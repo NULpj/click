@@ -4,13 +4,14 @@ import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebase
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyALG4AyNHx24-H_m55QCvFYdm20mbt8vc4",
+  authDomain: "clickcounter-2e61d.firebaseapp.com",
+  databaseURL: "https://clickcounter-2e61d-default-rtdb.firebaseio.com/",
+  projectId: "clickcounter-2e61d",
+  storageBucket: "clickcounter-2e61d.firebasestorage.app",
+  messagingSenderId: "115127954384",
+  appId: "1:115127954384:web:9c12fd16017b551f4fa7d5",
+  measurementId: "G-WD11S287JV"
 };
 
 // Initialize Firebase
