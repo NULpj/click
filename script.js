@@ -1,42 +1,28 @@
-// Firebase config
-const firebaseConfig = {
-    apiKey: "AIzaSyALG4AyNHx24-H_m55QCvFYdm20mbt8vc4",
-    authDomain: "clickcounter-2e61d.firebaseapp.com",
-    projectId: "clickcounter-2e61d",
-    storageBucket: "clickcounter-2e61d.firebasestorage.app",
-    messagingSenderId: "115127954384",
-    appId: "1:115127954384:web:9c12fd16017b551f4fa7d5",
-    measurementId: "G-WD11S287JV"
-};
+// Ganti dengan URL Web App Google Apps Script yang sudah kamu buat
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbz4uFfBaEpxvJep93Xkv1N37geuwyZxqNFktuY5sakp6_pGIyBLAxIWkcXzfgSMSFUU/exec';
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
-
-// Reference to click count in Firebase Database
-const clickCountRef = database.ref('clickCount');
-
-// Update total clicks from Firebase (real-time updates)
-clickCountRef.on('value', (snapshot) => {
-    const clickCount = snapshot.val() || 0;
-    document.getElementById('clickCount').innerText = clickCount;
-});
-
-// Function to update click count in Firebase
-function updateClickCount() {
-    clickCountRef.transaction((currentValue) => {
-        // Increase click count by 1
-        return (currentValue || 0) + 1;
-    }).then((result) => {
-        if (result.committed) {
-            console.log('Klik berhasil diperbarui');
-        } else {
-            console.log('Klik tidak berhasil diperbarui');
-        }
-    }).catch((error) => {
-        console.error('Terjadi kesalahan saat memperbarui klik:', error);
-    });
+// Fungsi untuk mendapatkan jumlah klik dari Google Sheets
+function getClickCount() {
+    fetch(scriptUrl + '?action=get')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('clickCount').innerText = data.clickCount;
+        })
+        .catch(error => console.error('Error getting click count:', error));
 }
 
-// Event listener for the click button
+// Fungsi untuk mengupdate jumlah klik di Google Sheets
+function updateClickCount() {
+    fetch(scriptUrl + '?action=increment', {
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(() => getClickCount()) // Update jumlah klik setelah diubah
+        .catch(error => console.error('Error updating click count:', error));
+}
+
+// Event listener untuk tombol
 document.getElementById('clickButton').addEventListener('click', updateClickCount);
+
+// Ambil jumlah klik pertama kali saat halaman dimuat
+window.onload = getClickCount;
