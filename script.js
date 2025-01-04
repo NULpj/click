@@ -1,28 +1,32 @@
-// Ganti dengan URL Web App Google Apps Script yang sudah kamu buat
-const scriptUrl = 'https://script.google.com/macros/s/AKfycbz4uFfBaEpxvJep93Xkv1N37geuwyZxqNFktuY5sakp6_pGIyBLAxIWkcXzfgSMSFUU/exec';
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
 
-// Fungsi untuk mendapatkan jumlah klik dari Google Sheets
-function getClickCount() {
-    fetch(scriptUrl + '?action=get')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('clickCount').innerText = data.clickCount;
-        })
-        .catch(error => console.error('Error getting click count:', error));
-}
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-// Fungsi untuk mengupdate jumlah klik di Google Sheets
-function updateClickCount() {
-    fetch(scriptUrl + '?action=increment', {
-        method: 'POST'
-    })
-        .then(response => response.json())
-        .then(() => getClickCount()) // Update jumlah klik setelah diubah
-        .catch(error => console.error('Error updating click count:', error));
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const counterRef = ref(db, "counter");
 
-// Event listener untuk tombol
-document.getElementById('clickButton').addEventListener('click', updateClickCount);
+// Update counter in real time
+const counterElement = document.getElementById("counter");
+onValue(counterRef, (snapshot) => {
+  const value = snapshot.val();
+  counterElement.textContent = value || 0;
+});
 
-// Ambil jumlah klik pertama kali saat halaman dimuat
-window.onload = getClickCount;
+// Increment counter on button click
+document.getElementById("incrementButton").addEventListener("click", () => {
+  const currentValue = parseInt(counterElement.textContent, 10);
+  set(counterRef, currentValue + 1);
+});
