@@ -3,23 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Counter with Firebase</title>
+    <title>Firebase Click Counter</title>
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <!-- External JS file -->
+    <script src="script.js" defer></script>
 </head>
 <body>
-    <header>
-        <h1>Click Counter</h1>
-    </header>
-    <main>
-        <p>Click the button below to increment the counter:</p>
-        <button id="clickButton">Click Me!</button>
-        <p>Total clicks: <span id="clickCount">0</span></p>
-    </main>
-    <footer>
-        <p>Made with love and JavaScript</p>
-    </footer>
-    <script src="script.js"></script>
+    <h1>Click Counter</h1>
+    <button id="clickButton">Click Me!</button>
+    <p>Total Clicks: <span id="clickCount">0</span></p>
 </body>
 </html>
