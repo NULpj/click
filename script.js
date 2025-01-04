@@ -1,33 +1,29 @@
-// Import Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js";
+const apiUrl = "https://script.google.com/macros/s/AKfycbx9NaD6b5bD8a5qLPwwGjUv2c-d1SNrz1qFCRmwIA-uKIfqZ7LuW7EI1oCAn7QYfOpw/exec"; // Ganti dengan URL dari Apps Script Anda
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyALG4AyNHx24-H_m55QCvFYdm20mbt8vc4",
-  authDomain: "clickcounter-2e61d.firebaseapp.com",
-  databaseURL: "https://clickcounter-2e61d-default-rtdb.firebaseio.com/",
-  projectId: "clickcounter-2e61d",
-  storageBucket: "clickcounter-2e61d.firebasestorage.app",
-  messagingSenderId: "115127954384",
-  appId: "1:115127954384:web:9c12fd16017b551f4fa7d5",
-  measurementId: "G-WD11S287JV"
-};
+// Fungsi untuk mengambil nilai counter
+async function fetchCounter() {
+  try {
+    const response = await fetch(`${apiUrl}?action=get`);
+    const data = await response.json();
+    document.getElementById("counter").textContent = data.count;
+  } catch (error) {
+    console.error("Error fetching counter:", error);
+  }
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const counterRef = ref(db, "counter");
+// Fungsi untuk menambah nilai counter
+async function incrementCounter() {
+  try {
+    const response = await fetch(`${apiUrl}?action=increment`);
+    const data = await response.json();
+    document.getElementById("counter").textContent = data.count;
+  } catch (error) {
+    console.error("Error incrementing counter:", error);
+  }
+}
 
-// Update counter in real time
-const counterElement = document.getElementById("counter");
-onValue(counterRef, (snapshot) => {
-  const value = snapshot.val();
-  counterElement.textContent = value || 0;
-});
+// Event listener untuk tombol
+document.getElementById("incrementButton").addEventListener("click", incrementCounter);
 
-// Increment counter on button click
-document.getElementById("incrementButton").addEventListener("click", () => {
-  const currentValue = parseInt(counterElement.textContent, 10);
-  set(counterRef, currentValue + 1);
-});
+// Ambil nilai counter saat halaman dimuat
+fetchCounter();
