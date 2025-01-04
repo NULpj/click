@@ -1,16 +1,22 @@
-// Mendapatkan elemen dari DOM
-const globalClickCountDisplay = document.getElementById('globalClickCount');
-const clickButton = document.getElementById('clickButton');
+// Ambil elemen dari DOM
+const counterElement = document.getElementById("counter");
+const incrementButton = document.getElementById("incrementButton");
+const resetButton = document.getElementById("resetButton");
 
-// Mengambil jumlah klik dari localStorage atau menginisialisasi dengan 0
-let globalClickCount = localStorage.getItem('globalClickCount') ? parseInt(localStorage.getItem('globalClickCount')) : 0;
+// Ambil nilai counter dari localStorage atau atur ke 0 jika belum ada
+let counter = parseInt(localStorage.getItem("counter")) || 0;
+counterElement.textContent = counter;
 
-// Menampilkan jumlah klik di halaman
-globalClickCountDisplay.textContent = globalClickCount;
+// Tambahkan event listener untuk tombol increment
+incrementButton.addEventListener("click", () => {
+  counter++; // Tambah nilai counter
+  counterElement.textContent = counter; // Perbarui tampilan
+  localStorage.setItem("counter", counter); // Simpan ke localStorage
+});
 
-// Menambahkan event listener untuk tombol
-clickButton.addEventListener('click', () => {
-    globalClickCount++;
-    globalClickCountDisplay.textContent = globalClickCount;
-    localStorage.setItem('globalClickCount', globalClickCount);
+// Tambahkan event listener untuk tombol reset
+resetButton.addEventListener("click", () => {
+  counter = 0; // Atur nilai counter ke 0
+  counterElement.textContent = counter; // Perbarui tampilan
+  localStorage.setItem("counter", counter); // Simpan ke localStorage
 });
