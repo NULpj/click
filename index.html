@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Global Click Counter</title>
+    <title>Firebase Real-Time Click Counter</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
     <h1>Total Klik: <span id="clickCount">0</span></h1>
     <button onclick="incrementClick()">Klik Saya!</button>
-    <script src="script.js"></script>
 </body>
 </html>
