@@ -1,29 +1,36 @@
-// Konfigurasi Firebase (ganti dengan milik Anda sendiri)
-const firebaseConfig = {
-  apiKey: "AIzaSyALG4AyNHx24-H_m55QCvFYdm20mbt8vc4",
-  authDomain: "clickcounter-2e61d.firebaseapp.com",
-  databaseURL: "https://clickcounter-2e61d-default-rtdb.firebaseio.com",
-  projectId: "clickcounter-2e61d",
-  storageBucket: "clickcounter-2e61d.firebasestorage.app",
-  messagingSenderId: "115127954384",
-  appId: "1:115127954384:web:9c12fd16017b551f4fa7d5",
-  measurementId: "G-WD11S287JV"
-};
+const url = 'https://script.google.com/macros/s/AKfycbwh2bR-5xHgy-KrkY9V2PbpgL6BHNPohAIF2h-Gxsbarggyir5ofQD4oL8b7IvEMiy6oA/exec';
+let lastClickCount = null; // Variabel untuk menyimpan data terakhir agar hanya update jika berubah
 
-// Inisialisasi Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-const clickCounterRef = database.ref('clickCounter/totalClicks');
+// Fungsi untuk mengambil data klik tanpa menambahnya
+async function fetchClickCount() {
+    try {
+        const response = await fetch(`${url}?action=get`);
+        const data = await response.json();
 
-// Fungsi untuk memperbarui tampilan saat data berubah (Real-Time Listener)
-clickCounterRef.on('value', (snapshot) => {
-    const data = snapshot.val();
-    document.getElementById('clickCount').innerText = data;
-});
-
-// Fungsi untuk menambahkan klik
-function incrementClick() {
-    clickCounterRef.transaction((currentClicks) => {
-        return (currentClicks || 0) + 1;
-    });
+        // Hanya update UI jika ada perubahan data
+        if (data.clicks !== lastClickCount) {
+            document.getElementById('clickCount').innerText = data.clicks;
+            lastClickCount = data.clicks;
+        }
+    } catch (error) {
+        console.error("Gagal mengambil data:", error);
+    }
 }
+
+// Fungsi menambah klik hanya ketika tombol ditekan
+async function incrementClick() {
+    try {
+        const response = await fetch(`${url}?action=increment`);
+        const data = await response.json();
+        document.getElementById('clickCount').innerText = data.clicks;
+        lastClickCount = data.clicks; // Update data terakhir
+    } catch (error) {
+        console.error("Gagal menambah klik:", error);
+    }
+}
+
+// Polling lebih cepat (setiap 1 detik) untuk real-time yang lebih responsif
+setInterval(fetchClickCount, 1000);
+
+// Ambil data awal saat halaman dimuat
+fetchClickCount();
